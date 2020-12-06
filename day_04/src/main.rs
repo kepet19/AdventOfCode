@@ -91,13 +91,11 @@ struct Passports {
 
 impl Passports {
     fn read_all_raw_passport(file_name: &str) -> Result<Passports, std::io::Error> {
-        let raw_passports: Vec<String> = std::fs::read_to_string(file_name)?
+        let passports: Vec<Passport> = std::fs::read_to_string(file_name)?
             .split("\n\n")
             .map(|x| x.parse())
             .flatten()
             .collect();
-
-        let passports = raw_passports.iter().map(|v| v.parse()).flatten().collect();
         Ok(Passports { passports })
     }
 
