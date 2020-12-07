@@ -75,6 +75,8 @@ fn main() {
     cache.insert("shiny gold".to_owned(), true);
 
     println!("counter: {}", bags.keys().filter(|key| is_gold_bag(key, &bags, &mut cache)).count());
+
+    println!("part 2 count: {}", count_bags_in_gold_bag("shiny gold", &bags)-1);
 }
 
 fn is_gold_bag(search_bag_name: &str, bags: &HashMap<String, Bag>, cache: &mut HashMap<String, bool>) -> bool {
@@ -101,4 +103,20 @@ fn is_gold_bag(search_bag_name: &str, bags: &HashMap<String, Bag>, cache: &mut H
     }
 
     false
+}
+
+fn count_bags_in_gold_bag(search_bag_name: &str, bags: &HashMap<String, Bag>) -> usize {
+    let mut count = 1;
+    match bags.get(search_bag_name) {
+        Some(inner_bags) => {
+            for bag in inner_bags.inner_bags.iter(){
+                count += bag.1 * count_bags_in_gold_bag(bag.0, bags);
+            }
+
+        }
+        None => {}
+    }
+
+    
+    count
 }
