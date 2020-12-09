@@ -8,7 +8,7 @@ struct Bag {
 }
 
 impl Bag {
-    fn read_all_raw_bags(file_name: &str) -> Result<HashMap<String,Bag>, std::io::Error> {
+    fn read_all_raw_bags(file_name: &str) -> Result<HashMap<String, Bag>, std::io::Error> {
         let mut bags = HashMap::new();
         std::fs::read_to_string(file_name)?
             .lines()
@@ -74,12 +74,24 @@ fn main() {
     let mut cache = HashMap::new();
     cache.insert("shiny gold".to_owned(), true);
 
-    println!("counter: {}", bags.keys().filter(|key| is_gold_bag(key, &bags, &mut cache)).count());
+    println!(
+        "counter: {}",
+        bags.keys()
+            .filter(|key| is_gold_bag(key, &bags, &mut cache))
+            .count()
+    );
 
-    println!("part 2 count: {}", count_bags_in_gold_bag("shiny gold", &bags)-1);
+    println!(
+        "part 2 count: {}",
+        count_bags_in_gold_bag("shiny gold", &bags) - 1
+    );
 }
 
-fn is_gold_bag(search_bag_name: &str, bags: &HashMap<String, Bag>, cache: &mut HashMap<String, bool>) -> bool {
+fn is_gold_bag(
+    search_bag_name: &str,
+    bags: &HashMap<String, Bag>,
+    cache: &mut HashMap<String, bool>,
+) -> bool {
     match bags.get(search_bag_name) {
         Some(inner_bags) => {
             for bag in inner_bags.inner_bags.iter() {
@@ -109,14 +121,12 @@ fn count_bags_in_gold_bag(search_bag_name: &str, bags: &HashMap<String, Bag>) ->
     let mut count = 1;
     match bags.get(search_bag_name) {
         Some(inner_bags) => {
-            for bag in inner_bags.inner_bags.iter(){
+            for bag in inner_bags.inner_bags.iter() {
                 count += bag.1 * count_bags_in_gold_bag(bag.0, bags);
             }
-
         }
         None => {}
     }
 
-    
     count
 }
