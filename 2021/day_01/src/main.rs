@@ -18,16 +18,12 @@ fn solution_2() -> usize {
 }
 
 fn solution_1() -> usize {
-    let numbers = read_numbers();
     let mut count = 0;
-    let mut previus_number = usize::MAX;
-
-    for number in numbers {
-        if number > previus_number {
-            count += 1;
-            previus_number = number;
-        } else {
-            previus_number = number;
+    for numbers in read_numbers().windows(2) {
+        if let [first, second] = numbers {
+            if first < second {
+                count += 1;
+            }
         }
     }
     count
